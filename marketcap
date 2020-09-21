@@ -1,0 +1,41 @@
+import pandas as pd
+
+df = pd.read_csv('sample.csv', sep=',', header=0)
+# df = dataframe, we are asking it by using pandas function read to read the csv file, serperator is ",", header is 0
+
+# This function takes the $ off the salary value in the csv file and then also turn the data type into a float
+# we are using this function to clean up the csv file so we can use it
+def cleanup_salary(row):
+    salary = row['Salary'].replace('$', '')
+    salary = float(salary)
+    return salary
+
+df['Clean_salary'] = df.apply(cleanup_salary, axis=1)
+
+# Create column called clean_salary that column is the result of the Salary column in the original
+# dataframe, after the cleanup_salary function has been applied
+
+print('AVERAGE SALARY BY GENDER')
+print(df.groupby('gender')['Clean_salary'].mean())
+
+# function that looks through each row and finds females then returns their clean salary
+def female_salary(row):
+    if row['gender'] == 'Female':
+        return row['Clean_salary']
+
+# function that looks through each row and finds males then returns their clean salary
+def male_salary(row):
+    if row['gender'] == 'Male':
+        return row['Clean_salary']
+
+# creates a new column called female_salary_avg and places clean female salaries in it
+df['female_salary_avg'] = df.apply(female_salary, axis=1)
+df['male_salary_avg'] = df.apply(male_salary, axis=1)
+
+# to see the entire dataframe in the terminal we can use a set option function in Pandas
+pd.set_option('display.max_columns', None)
+
+# using the group by method to pick out men and women by job titles
+print(df.groupby(['Job Title', 'City'])['Clean_salary', 'male_salary_avg', 'female_salary_avg' ].mean())
+
+print(df.loc[df['Clean_salary'] > 50000])

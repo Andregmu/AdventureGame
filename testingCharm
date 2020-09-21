@@ -1,0 +1,35 @@
+import numpy as np
+import pandas as pd
+from pandas_datareader import data as wb
+import matplotlib.pyplot as plt
+
+# We can find the average and standard diviation to stonks and determine the risk associated with them.
+
+tickers = ['DKNG', 'AMD']
+
+sec_data = pd.DataFrame()
+
+for t in tickers:
+    sec_data[t] = wb.DataReader(t, data_source='yahoo', start='2019-1-1')['Adj Close']
+
+sec_data.tail()
+sec_returns = np.log(sec_data / sec_data.shift(1))
+
+# Get the annual rate of return and standard div per stock
+print("Average")
+print(sec_returns[['DKNG', 'AMD']].mean() * 250)
+print("standard div")
+print(sec_returns[['DKNG', 'AMD']].std() * 250 ** 0.5)
+print("Now the varience is:")
+# Now we can capture the variances between the stocks
+DKNG_var = sec_returns['DKNG'].var() * 250
+AMD_var = sec_returns['AMD'].var() * 250
+
+cov_matrix = sec_returns.cov() * 250
+print(cov_matrix)
+print("The correlation between the two:")
+# Lastly the correlation
+corr_matrix = sec_returns.corr()
+print(corr_matrix)
+
+

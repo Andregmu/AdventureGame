@@ -1,0 +1,20 @@
+import pandas as pd
+# importing data
+
+# this works because sample.csv is in the same folder as this program
+sample_data = pd.read_csv('sample.csv')
+# we can swap out the sample.csv for many different things like
+# table, which is normally a text file
+# excel, for excel documents
+# sql
+# json
+
+# we can even create or own dataframes using python objects and structures
+d = {
+    "name": "bob smith",
+    "age" : 23
+}
+
+df3 = pd.DataFrame(d, index=[0])
+
+print(df3)

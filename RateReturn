@@ -1,0 +1,17 @@
+# Program to calculate the rate the rate of return between equities
+# rate of return = (ending price - beginning price) / beginning price
+# annual return = [(daily return + 1)^(365)] * 100
+
+import numpy as np
+from pandas_datareader import data as wb
+import matplotlib.pyplot as plt
+
+Symbol = input("Enter the stock symbol ")
+Symbol = wb.DataReader(Symbol, data_source='yahoo', start='2020-1-1')
+Symbol['simple_return'] = (Symbol['Adj Close'] / Symbol['Adj Close'].shift(1)) - 1
+avg_returns_d = Symbol['simple_return'].mean() * 250
+print(str(round(avg_returns_d, 5) * 100) + ' %')
+
+
+
+
